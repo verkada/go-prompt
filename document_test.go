@@ -9,11 +9,11 @@ import (
 
 func ExampleDocument_CurrentLine() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.CurrentLine())
@@ -23,7 +23,7 @@ This is a exam`),
 
 func ExampleDocument_DisplayCursorPosition() {
 	d := &Document{
-		Text:           `Hello! my name is verkada.`,
+		Text:           `Hello! my name is tengteng.`,
 		cursorPosition: len(`Hello`),
 	}
 	fmt.Println("DisplayCursorPosition", d.DisplayCursorPosition())
@@ -33,11 +33,11 @@ func ExampleDocument_DisplayCursorPosition() {
 
 func ExampleDocument_CursorPositionRow() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println("CursorPositionRow", d.CursorPositionRow())
@@ -47,11 +47,11 @@ This is a exam`),
 
 func ExampleDocument_CursorPositionCol() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println("CursorPositionCol", d.CursorPositionCol())
@@ -61,26 +61,26 @@ This is a exam`),
 
 func ExampleDocument_TextBeforeCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.TextBeforeCursor())
 	// Output:
-	// Hello! my name is verkada.
+	// Hello! my name is tengteng.
 	// This is a exam
 }
 
 func ExampleDocument_TextAfterCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.TextAfterCursor())
@@ -101,11 +101,11 @@ func ExampleDocument_DisplayCursorPosition_withJapanese() {
 
 func ExampleDocument_CurrentLineBeforeCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.CurrentLineBeforeCursor())
@@ -115,11 +115,11 @@ This is a exam`),
 
 func ExampleDocument_CurrentLineAfterCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 This component has texts displayed in terminal and cursor position.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.CurrentLineAfterCursor())
@@ -129,10 +129,10 @@ This is a exam`),
 
 func ExampleDocument_GetWordBeforeCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.GetWordBeforeCursor())
@@ -142,10 +142,10 @@ This is a exam`),
 
 func ExampleDocument_GetWordAfterCursor() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a exam`),
 	}
 	fmt.Println(d.GetWordAfterCursor())
@@ -155,10 +155,10 @@ This is a exam`),
 
 func ExampleDocument_GetWordBeforeCursorWithSpace() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a example `),
 	}
 	fmt.Println(d.GetWordBeforeCursorWithSpace())
@@ -168,10 +168,10 @@ This is a example `),
 
 func ExampleDocument_GetWordAfterCursorWithSpace() {
 	d := &Document{
-		Text: `Hello! my name is verkada.
+		Text: `Hello! my name is tengteng.
 This is a example of Document component.
 `,
-		cursorPosition: len(`Hello! my name is verkada.
+		cursorPosition: len(`Hello! my name is tengteng.
 This is a`),
 	}
 	fmt.Println(d.GetWordAfterCursorWithSpace())
@@ -181,7 +181,7 @@ This is a`),
 
 func ExampleDocument_GetWordBeforeCursorUntilSeparator() {
 	d := &Document{
-		Text:           `hello,i am verkada`,
+		Text:           `hello,i am tengteng`,
 		cursorPosition: len(`hello,i am c`),
 	}
 	fmt.Println(d.GetWordBeforeCursorUntilSeparator(","))
@@ -191,32 +191,32 @@ func ExampleDocument_GetWordBeforeCursorUntilSeparator() {
 
 func ExampleDocument_GetWordAfterCursorUntilSeparator() {
 	d := &Document{
-		Text:           `hello,i am verkada,thank you for using go-prompt`,
+		Text:           `hello,i am tengteng,thank you for using go-prompt`,
 		cursorPosition: len(`hello,i a`),
 	}
 	fmt.Println(d.GetWordAfterCursorUntilSeparator(","))
 	// Output:
-	// m verkada
+	// m tengteng
 }
 
 func ExampleDocument_GetWordBeforeCursorUntilSeparatorIgnoreNextToCursor() {
 	d := &Document{
-		Text:           `hello,i am verkada,thank you for using go-prompt`,
-		cursorPosition: len(`hello,i am verkada,`),
+		Text:           `hello,i am tengteng,thank you for using go-prompt`,
+		cursorPosition: len(`hello,i am tengteng,`),
 	}
 	fmt.Println(d.GetWordBeforeCursorUntilSeparatorIgnoreNextToCursor(","))
 	// Output:
-	// i am verkada,
+	// i am tengteng,
 }
 
 func ExampleDocument_GetWordAfterCursorUntilSeparatorIgnoreNextToCursor() {
 	d := &Document{
-		Text:           `hello,i am verkada,thank you for using go-prompt`,
+		Text:           `hello,i am tengteng,thank you for using go-prompt`,
 		cursorPosition: len(`hello`),
 	}
 	fmt.Println(d.GetWordAfterCursorUntilSeparatorIgnoreNextToCursor(","))
 	// Output:
-	// ,i am verkada
+	// ,i am tengteng
 }
 
 func TestDocument_DisplayCursorPosition(t *testing.T) {
