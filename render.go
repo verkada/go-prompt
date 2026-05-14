@@ -2,6 +2,7 @@ package prompt
 
 import (
 	"runtime"
+	"strings"
 
 	runewidth "github.com/mattn/go-runewidth"
 	"github.com/verkada/go-prompt/internal/debug"
@@ -18,6 +19,8 @@ type Render struct {
 	col                uint16
 
 	previousCursor int
+	headerLines    int           // number of terminal lines the current header occupies; 0 = no header
+	headerCallback func() string // returns header text; may contain newlines; empty = no header
 
 	// colors,
 	prefixTextColor              Color
@@ -58,6 +61,12 @@ func (r *Render) getCurrentPrefix() string {
 func (r *Render) renderPrefix() {
 	r.out.SetColor(r.prefixTextColor, r.prefixBGColor, false)
 	r.out.WriteStr(r.getCurrentPrefix())
+	r.out.SetColor(DefaultColor, DefaultColor, false)
+}
+
+func (r *Render) renderHeader(header string) {
+	r.out.SetColor(r.prefixTextColor, r.prefixBGColor, false)
+	r.out.WriteRawStr(header + "\n")
 	r.out.SetColor(DefaultColor, DefaultColor, false)
 }
 
@@ -174,16 +183,23 @@ func (r *Render) Render(buffer *Buffer, completion *CompletionManager) {
 		return
 	}
 	defer func() { debug.AssertNoError(r.out.Flush()) }()
-	r.move(r.previousCursor, 0)
 
 	line := buffer.Text()
 	prefix := r.getCurrentPrefix()
 	cursor := runewidth.StringWidth(prefix) + runewidth.StringWidth(line)
 
+	header := ""
+	if r.headerCallback != nil {
+		header = r.headerCallback()
+	}
+	newHeaderLines := 0
+	if header != "" {
+		newHeaderLines = strings.Count(header, "\n") + 1
+	}
+
 	// prepare area
 	_, y := r.toPos(cursor)
-
-	h := y + 1 + int(completion.max)
+	h := y + 1 + int(completion.max) + newHeaderLines
 	if h > int(r.row) || completionMargin > int(r.col) {
 		r.renderWindowTooSmall()
 		return
@@ -192,6 +208,17 @@ func (r *Render) Render(buffer *Buffer, completion *CompletionManager) {
 	// Rendering
 	r.out.HideCursor()
 	defer r.out.ShowCursor()
+
+	r.move(r.previousCursor, 0)
+	if r.headerLines > 0 {
+		r.out.CursorUp(r.headerLines)
+	}
+	r.out.EraseDown()
+
+	if header != "" {
+		r.renderHeader(header)
+	}
+	r.headerLines = newHeaderLines
 
 	r.renderPrefix()
 	r.out.SetColor(r.inputTextColor, r.inputBGColor, false)
@@ -224,9 +251,10 @@ func (r *Render) Render(buffer *Buffer, completion *CompletionManager) {
 
 // BreakLine to break line.
 func (r *Render) BreakLine(buffer *Buffer) {
-	// Erasing and Render
 	cursor := runewidth.StringWidth(buffer.Document().TextBeforeCursor()) + runewidth.StringWidth(r.getCurrentPrefix())
-	r.clear(cursor)
+	r.move(cursor, 0)
+	r.out.EraseDown()
+	r.headerLines = 0
 	r.renderPrefix()
 	r.out.SetColor(r.inputTextColor, r.inputBGColor, false)
 	r.out.WriteStr(buffer.Document().Text + "\n")
@@ -235,7 +263,6 @@ func (r *Render) BreakLine(buffer *Buffer) {
 	if r.breakLineCallback != nil {
 		r.breakLineCallback(buffer.Document())
 	}
-
 	r.previousCursor = 0
 }
 

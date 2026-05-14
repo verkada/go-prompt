@@ -182,11 +182,11 @@ This is a`),
 func ExampleDocument_GetWordBeforeCursorUntilSeparator() {
 	d := &Document{
 		Text:           `hello,i am tengteng`,
-		cursorPosition: len(`hello,i am c`),
+		cursorPosition: len(`hello,i am t`),
 	}
 	fmt.Println(d.GetWordBeforeCursorUntilSeparator(","))
 	// Output:
-	// i am c
+	// i am t
 }
 
 func ExampleDocument_GetWordAfterCursorUntilSeparator() {
