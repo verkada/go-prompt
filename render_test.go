@@ -113,3 +113,60 @@ func TestBreakLineCallback(t *testing.T) {
 		t.Errorf("BreakLine callback not called, i should be 3")
 	}
 }
+
+func TestHeaderCallback(t *testing.T) {
+	makeRender := func(header func() string) *Render {
+		return &Render{
+			prefix: "> ",
+			out: &PosixWriter{
+				fd: syscall.Stdin,
+			},
+			livePrefixCallback:           func() (string, bool) { return "", false },
+			headerCallback:               header,
+			prefixTextColor:              Blue,
+			prefixBGColor:                DefaultColor,
+			inputTextColor:               DefaultColor,
+			inputBGColor:                 DefaultColor,
+			previewSuggestionTextColor:   Green,
+			previewSuggestionBGColor:     DefaultColor,
+			suggestionTextColor:          White,
+			suggestionBGColor:            Cyan,
+			selectedSuggestionTextColor:  Black,
+			selectedSuggestionBGColor:    Turquoise,
+			descriptionTextColor:         Black,
+			descriptionBGColor:           Turquoise,
+			selectedDescriptionTextColor: White,
+			selectedDescriptionBGColor:   Cyan,
+			scrollbarThumbColor:          DarkGray,
+			scrollbarBGColor:             Cyan,
+			col:                          80,
+		}
+	}
+
+	t.Run("BreakLine resets headerLines to 0 for single-line header", func(t *testing.T) {
+		r := makeRender(func() string { return "ENV:prod1 | ORG:xxxx" })
+		r.headerLines = 1
+		r.BreakLine(NewBuffer())
+		if r.headerLines != 0 {
+			t.Errorf("expected headerLines=0 after BreakLine, got %d", r.headerLines)
+		}
+	})
+
+	t.Run("BreakLine resets headerLines to 0 for multi-line header", func(t *testing.T) {
+		r := makeRender(func() string { return "ENV:prod1\nORG:xxxx\nUSR:yyyy" })
+		r.headerLines = 3
+		r.BreakLine(NewBuffer())
+		if r.headerLines != 0 {
+			t.Errorf("expected headerLines=0 after BreakLine, got %d", r.headerLines)
+		}
+	})
+
+	t.Run("BreakLine is a no-op when headerLines is already 0", func(t *testing.T) {
+		r := makeRender(nil)
+		r.headerLines = 0
+		r.BreakLine(NewBuffer())
+		if r.headerLines != 0 {
+			t.Errorf("expected headerLines to remain 0, got %d", r.headerLines)
+		}
+	})
+}

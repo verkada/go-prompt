@@ -266,6 +266,17 @@ func OptionSetExitCheckerOnInput(fn ExitChecker) Option {
 	}
 }
 
+// OptionHeader sets a callback that returns a header displayed above the prompt.
+// The string may contain newlines for a multi-line header.
+// The header is erased on Enter before command output appears, so it never enters scroll history.
+// Returning an empty string hides the header.
+func OptionHeader(fn func() string) Option {
+	return func(p *Prompt) error {
+		p.renderer.headerCallback = fn
+		return nil
+	}
+}
+
 // New returns a Prompt with powerful auto-completion.
 func New(executor Executor, completer Completer, opts ...Option) *Prompt {
 	defaultWriter := NewStdoutWriter()
