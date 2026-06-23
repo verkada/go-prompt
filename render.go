@@ -21,6 +21,7 @@ type Render struct {
 	previousCursor int
 	headerLines    int           // number of terminal lines the current header occupies; 0 = no header
 	headerCallback func() string // returns header text; may contain newlines; empty = no header
+	maxSuggestion  uint16        // configured upper bound for visible suggestions (0 = unset/no autoscale)
 
 	// colors,
 	prefixTextColor              Color
@@ -199,6 +200,25 @@ func (r *Render) Render(buffer *Buffer, completion *CompletionManager) {
 
 	// prepare area
 	_, y := r.toPos(cursor)
+
+	// Autoscale the visible suggestion count to the available terminal height
+	// so the prompt stays usable in a small window. maxSuggestion is the
+	// configured upper bound (OptionMaxSuggestion); shrink it to fit but never
+	// below 1. completion.max also drives the scroll math in CompletionManager,
+	// so updating it here keeps scrolling consistent. Render runs on every
+	// SIGWINCH, so this re-adapts on live window resize.
+	if r.maxSuggestion > 0 {
+		available := int(r.row) - y - 1 - newHeaderLines
+		if available < 1 {
+			available = 1
+		}
+		if int(r.maxSuggestion) > available {
+			completion.max = uint16(available)
+		} else {
+			completion.max = r.maxSuggestion
+		}
+	}
+
 	h := y + 1 + int(completion.max) + newHeaderLines
 	if h > int(r.row) || completionMargin > int(r.col) {
 		r.renderWindowTooSmall()
