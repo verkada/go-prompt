@@ -190,9 +190,13 @@ func OptionScrollbarBGColor(x Color) Option {
 }
 
 // OptionMaxSuggestion specify the max number of displayed suggestions.
+// This acts as an upper bound: the renderer shrinks the number of visible
+// suggestions to fit the terminal height (see Render), so the prompt stays
+// usable in a small window without requiring room for the full count.
 func OptionMaxSuggestion(x uint16) Option {
 	return func(p *Prompt) error {
 		p.completion.max = x
+		p.renderer.maxSuggestion = x
 		return nil
 	}
 }
