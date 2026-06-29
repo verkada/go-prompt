@@ -1,4 +1,10 @@
 # CODEOWNERS
+#
+# This is a Verkada-owned fork of go-prompt, consumed primarily by vtb
+# (Verkada-Backend: engtools/vtb). Owners mirror the vtb owners so changes
+# route to the teams that actually depend on this library, plus security.
+#
+# NOTE: GitHub applies only the last matching pattern, so all owners for a
+# path must be on a single line (do not split across multiple `*` lines).
 
-* @verkada/Backend-Infrastructure
-* @verkada/security-eng
+* @verkada/eng-tools @verkada/devx-command-tools @verkada/security-eng
