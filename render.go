@@ -71,6 +71,29 @@ func (r *Render) renderHeader(header string) {
 	r.out.SetColor(DefaultColor, DefaultColor, false)
 }
 
+// headerLineCount returns the number of physical terminal rows the header will
+// occupy once printed, accounting for logical lines that wrap because they are
+// wider than the current terminal width.
+func (r *Render) headerLineCount(header string) int {
+	if header == "" {
+		return 0
+	}
+	col := int(r.col)
+	if col <= 0 {
+		return strings.Count(header, "\n") + 1
+	}
+	rows := 0
+	for _, line := range strings.Split(header, "\n") {
+		w := runewidth.StringWidth(line)
+		if w <= col {
+			rows++
+		} else {
+			rows += (w + col - 1) / col
+		}
+	}
+	return rows
+}
+
 // TearDown to clear title and erasing.
 func (r *Render) TearDown() {
 	r.out.ClearTitle()
@@ -101,6 +124,12 @@ func (r *Render) renderWindowTooSmall() {
 }
 
 func (r *Render) renderCompletion(buf *Buffer, completions *CompletionManager) {
+	// max == 0 disables completion entirely; draw no dropdown at all. Otherwise
+	// the dropdown renders as usual, capped at completions.max rows (set via
+	// OptionMaxSuggestion).
+	if completions.max == 0 {
+		return
+	}
 	suggestions := completions.GetSuggestions()
 	if len(completions.GetSuggestions()) == 0 {
 		return
@@ -193,10 +222,13 @@ func (r *Render) Render(buffer *Buffer, completion *CompletionManager) {
 	if r.headerCallback != nil {
 		header = r.headerCallback()
 	}
-	newHeaderLines := 0
-	if header != "" {
-		newHeaderLines = strings.Count(header, "\n") + 1
-	}
+	// Count the *physical* rows the header occupies, not just its logical lines.
+	// When the header is wider than the terminal it wraps onto multiple rows;
+	// tracking only logical lines made the next render's CursorUp undershoot, so
+	// EraseDown left the wrapped portion on screen and the header line duplicated
+	// on every keystroke. It also keeps the autoscale and window-too-small math
+	// below accurate for wrapping headers.
+	newHeaderLines := r.headerLineCount(header)
 
 	// prepare area
 	_, y := r.toPos(cursor)

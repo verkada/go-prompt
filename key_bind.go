@@ -56,4 +56,14 @@ var commonKeyBindings = []KeyBind{
 		Key: Left,
 		Fn:  GoLeftChar,
 	},
+	// Ctrl/Option + Right: forward one word (macOS Option+Right, Alt+f).
+	{
+		Key: ControlRight,
+		Fn:  GoRightWord,
+	},
+	// Ctrl/Option + Left: backward one word (macOS Option+Left, Alt+b).
+	{
+		Key: ControlLeft,
+		Fn:  GoLeftWord,
+	},
 }

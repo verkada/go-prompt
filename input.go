@@ -164,6 +164,21 @@ var ASCIISequences = []*ASCIICode{
 	{Key: ControlRight, ASCIICode: []byte{0x1b, 0x5b, 0x4f, 0x63}}, // rxvt
 	{Key: ControlLeft, ASCIICode: []byte{0x1b, 0x5b, 0x4f, 0x64}},  // rxvt
 
+	// macOS Option/Alt + Left/Right for word-wise motion.
+	// Terminal.app and iTerm2 send Meta-b / Meta-f (ESC b / ESC f) by default;
+	// some configs instead send the CSI "alt" variants (modifier parameter 3).
+	// Map them all to ControlLeft/ControlRight, which are bound to word motion.
+	{Key: ControlLeft, ASCIICode: []byte{0x1b, 0x62}},                          // Option/Alt + Left (Meta-b)
+	{Key: ControlRight, ASCIICode: []byte{0x1b, 0x66}},                         // Option/Alt + Right (Meta-f)
+	{Key: ControlLeft, ASCIICode: []byte{0x1b, 0x5b, 0x31, 0x3b, 0x33, 0x44}},  // Alt + Left (CSI 1;3D)
+	{Key: ControlRight, ASCIICode: []byte{0x1b, 0x5b, 0x31, 0x3b, 0x33, 0x43}}, // Alt + Right (CSI 1;3C)
+
+	// macOS Option/Alt + Backspace sends Meta-DEL (ESC DEL).
+	// Treat it as "delete the word before the cursor" (ControlW, which the
+	// default Emacs key-bind mode binds to word deletion) instead of inserting
+	// the raw bytes.
+	{Key: ControlW, ASCIICode: []byte{0x1b, 0x7f}}, // Option/Alt + Backspace (Meta-DEL)
+
 	{Key: Ignore, ASCIICode: []byte{0x1b, 0x5b, 0x45}}, // Xterm
 	{Key: Ignore, ASCIICode: []byte{0x1b, 0x5b, 0x46}}, // Linux console
 }
