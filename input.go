@@ -20,7 +20,7 @@ type ConsoleParser interface {
 	Read() ([]byte, error)
 }
 
-// GetKey returns Key correspond to input byte codes.
+// GetKey returns Key corresponding to input byte codes.
 func GetKey(b []byte) Key {
 	for _, k := range ASCIISequences {
 		if bytes.Equal(k.ASCIICode, b) {
