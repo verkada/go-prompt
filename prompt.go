@@ -8,7 +8,7 @@ import (
 	"github.com/verkada/go-prompt/internal/debug"
 )
 
-// Executor is called when user input something text.
+// Executor is called when user inputs some text.
 type Executor func(string)
 
 // ExitChecker is called after user input to check if prompt must stop and exit go-prompt Run loop.

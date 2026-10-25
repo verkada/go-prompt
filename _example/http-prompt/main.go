@@ -30,7 +30,7 @@ var suggestions = []prompt.Suggest{
 	// HTTP Method
 	{"delete", "DELETE request"},
 	{"get", "GET request"},
-	{"patch", "GET request"},
+	{"patch", "PATCH request"},
 	{"post", "POST request"},
 	{"put", "PUT request"},
 

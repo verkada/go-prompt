@@ -13,7 +13,7 @@ func registerConsoleWriter(f ConsoleWriter) {
 	consoleWriter = f
 }
 
-// DisplayAttribute represents display  attributes like Blinking, Bold, Italic and so on.
+// DisplayAttribute represents display attributes like Blinking, Bold, Italic and so on.
 type DisplayAttribute int
 
 const (
@@ -144,7 +144,7 @@ type ConsoleWriter interface {
 
 	// ScrollDown scrolls display down one line.
 	ScrollDown()
-	// ScrollUp scroll display up one line.
+	// ScrollUp scrolls display up one line.
 	ScrollUp()
 
 	/* Title */

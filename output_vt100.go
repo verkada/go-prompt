@@ -169,7 +169,7 @@ func (w *VT100Writer) ScrollDown() {
 	w.WriteRaw([]byte{0x1b, 'D'})
 }
 
-// ScrollUp scroll display up one line.
+// ScrollUp scrolls display up one line.
 func (w *VT100Writer) ScrollUp() {
 	w.WriteRaw([]byte{0x1b, 'M'})
 }
@@ -213,8 +213,8 @@ func (w *VT100Writer) SetColor(fg, bg Color, bold bool) {
 	if bold {
 		w.SetDisplayAttributes(fg, bg, DisplayBold)
 	} else {
-		// If using `DisplayDefualt`, it will be broken in some environment.
-		// Details are https://github.com/verkada/go-prompt/pull/85
+		// If using `DisplayDefaultFont`, it will be broken in some environment.
+		// Details are https://github.com/c-bata/go-prompt/pull/85
 		w.SetDisplayAttributes(fg, bg, DisplayReset)
 	}
 }
